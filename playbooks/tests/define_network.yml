@@ -1,0 +1,6 @@
+---
+- name: Define Isolated VM Network
+  hosts: localhost
+  roles:
+    - role: lab.define_net
+

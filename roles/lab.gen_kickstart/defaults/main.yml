@@ -1,0 +1,8 @@
+vm_name: generic_vm
+vm_ks_image: kickstart.img
+ks_timezone: America/New_York
+ks_kbd_layout: us
+ks_sys_language: en_US.UTF-8
+ks_additional_pkgs: ""
+ks_bootloader_append: loglevel=3
+ks_postinstall_script: ""

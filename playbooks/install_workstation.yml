@@ -1,0 +1,28 @@
+---
+- name: Install workstation Virtual Machine
+  hosts: localhost
+  vars:
+    iso_filename: "rhel9-dvd.iso"
+    vm_name: workstation
+    vm_cpus: 4
+    vm_memory: 4096
+    vm_network: lab-isolnet
+    vm_disk_size: 27
+    vm_cdrom: "/tmp/lab-images/{{ iso_filename }}"
+    vm_ks_image: workstation_ks.img
+    ks_additional_pkgs: |
+      @base-X
+      @Fonts
+      @office-suite
+      gdm
+      gnome-terminal
+      firefox
+      nautilus
+      gedit
+    ks_postinstall_script: |
+      systemctl set-default graphical.target
+  roles:
+    - lab.define_net
+    - lab.fetch_media
+    - lab.gen_kickstart
+    - lab.install_vm

@@ -1,0 +1,72 @@
+# Kickstart for RHEL9, AlmaLinux9, RockyLinux9
+# I recommend using a DVD or minimal image.
+# Boot img will probably only work if you have network
+
+# Use Text Mode because we dont have enough ram lol
+text
+
+# Reboot Automatically when Done
+reboot
+
+# System timezone
+timezone {{ ks_timezone }} --utc
+
+# Keyboard layouts
+keyboard --xlayouts='{{ ks_kbd_layout }}'
+
+# System language
+lang {{ ks_sys_language }}
+
+# Network information
+#network  --bootproto=dhcp --device=enp1s0 --ipv6=auto --no-activate
+network  --hostname={{ vm_name }}
+
+# Use CDROM installation media
+cdrom
+
+# Security settings
+selinux --enforcing
+firewall --enabled --ssh
+
+# Installation Profile
+%packages
+@^minimal-environment
+{{ ks_additional_pkgs }}
+%end
+
+# Run the Setup Agent on first boot
+firstboot --enable
+
+# Bootloader options: Silence some messages 
+bootloader --append="{{ ks_bootloader_append }}"
+
+# Clean up MBR
+zerombr
+
+# Generated using Blivet version 3.4.0
+ignoredisk --only-use=vda
+
+# Partition clearing information
+clearpart --all --initlabel
+
+# Disk partitioning information
+part /boot --fstype="xfs" --size=1024
+part pv.001 --fstype="lvmpv" --size=1 --grow
+volgroup sys pv.001
+logvol swap --fstype="swap" --name=swap --vgname=sys --size=2048
+logvol / --fstype="xfs" --name=root --vgname=sys --grow --percent=100
+
+# Disable kdump
+%addon com_redhat_kdump --disable
+%end
+
+# Root account is locked. Create an admin user instead
+rootpw --lock
+
+# Password is 'fishy'
+user --groups=wheel --name=admin --password=$6$dc6DKtnC/SFeBuDw$T1.ve34WiGnHyfDx3TUU9IloMzfr8sswXSzCzkXUq5fkLZ4cdN0b2p2aWKQXnHPAbSkWhRaz3K4odh6ZZnH540 --iscrypted --gecos="admin"
+
+# Post install commands
+%post
+{{ ks_postinstall_script }}
+%end

@@ -1,0 +1,9 @@
+---
+- name: Fetch ISO image if needed
+  command: "{{ role_path }}/files/get-iso.sh {{ iso_filename }} {{ iso_url }}"
+
+- name: Verify ISO presence in tmp
+  copy:
+    src: "{{ role_path }}/files/iso/{{ iso_filename }}"
+    dest: "/tmp/lab-images/{{ iso_filename }}"
+    

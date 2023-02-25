@@ -1,0 +1,6 @@
+<network>
+  <name>lab-isolnet</name>
+  <uuid>e4822a34-9194-4b94-a74b-e76856ed453f</uuid>
+  <bridge name="lab-isolnet" stp="on" delay="0"/>
+  <mac address="52:54:00:d4:70:74"/>
+</network>

@@ -1,0 +1,24 @@
+---
+- name: Make sure your host system has the right packages
+  hosts: localhost
+  become: yes
+
+  vars_prompt:
+    - name: your_username
+      prompt: What user will be using virt-manager and virsh?
+      private: false
+
+  tasks:
+    - name: Install packages
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - "@Virtualization"
+        - libguestfs 
+
+    - name: Validate user is part of the libvirt group
+      user:
+        name: "{{ your_username }}"
+        groups: libvirt
+        append: yes

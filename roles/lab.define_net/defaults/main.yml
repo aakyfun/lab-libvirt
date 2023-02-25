@@ -1,0 +1,3 @@
+vm_uri: qemu:///system
+net_name: lab-isolnet
+net_definition: lab-isolnet.xml

@@ -1,0 +1,33 @@
+---
+- name: Check if requested Virtual Machine already exists
+  shell: virsh --connect {{ vm_uri }} list --name --all | grep -x {{ vm_name }} | wc -l
+  register: vm_exists
+
+- name: Install VM and insert Kickstart Media
+  block:
+  - name: Install Virtual Machine
+    command: >
+      virt-install
+      --connect {{ vm_uri }}
+      --name {{ vm_name }}
+      --os-variant {{ vm_os_variant }}
+      --vcpus {{ vm_cpus }}
+      --memory {{ vm_memory }}
+      --video {{ vm_video }}
+      --network network={{ vm_network }}
+      --disk path={{ vm_disk_path }},size={{ vm_disk_size }}
+      --cdrom {{ vm_cdrom }}
+      --noautoconsole
+      {{ vm_extra_args }}
+  
+  - name: Wait for VM to get recognized
+    command: sleep 4
+  
+  - name: Attach Kickstart Media non-persistently
+    command: >
+      virsh
+      --connect {{ vm_uri }} 
+      attach-disk {{ vm_name }}
+      --source {{ vm_kickstart_disk_path }}
+      --target vdz
+  when: vm_exists.stdout == "0"

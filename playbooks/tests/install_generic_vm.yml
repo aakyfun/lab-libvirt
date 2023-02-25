@@ -1,0 +1,5 @@
+---
+- name: Install a generic VM
+  hosts: localhost
+  roles:
+    - role: lab.install_vm

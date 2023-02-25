@@ -1,0 +1,9 @@
+---
+- name: Template the kickstart cfg file
+  template:
+    src: "{{ role_path }}/files/ks.cfg.j2"
+    dest: "{{ role_path }}/files/ks.cfg"
+
+- name: Run kickstart image generator script
+  command: "{{ role_path }}/files/generate.sh {{ vm_ks_image }}"
+

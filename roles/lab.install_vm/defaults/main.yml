@@ -1,0 +1,13 @@
+vm_uri: qemu:///system
+vm_name: generic_vm
+vm_ks_image: kickstart.img
+vm_os_variant: rhel9.0
+vm_cpus: 1
+vm_memory: 1024
+vm_video: qxl
+vm_disk_size: 17
+vm_disk_path: /var/lib/libvirt/images/{{ vm_name }}
+vm_kickstart_disk_path: /tmp/lab-images/{{ vm_ks_image }}
+vm_network: lab-isolnet
+vm_cdrom: /tmp/lab-images/alma9-minimal.iso
+vm_extra_args: " "

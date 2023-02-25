@@ -1,0 +1,18 @@
+---
+- name: Check if Network is already defined
+  shell: virsh --connect {{ vm_uri }} net-list --name --all | grep -x {{ net_name }} | wc -l
+  register: net_exists
+
+- name: Define and automatically start Network
+  block:
+  - name: Define Network from XML
+    command: virsh --connect {{ vm_uri }} net-define --file {{ role_path }}/files/{{ net_definition }}
+    when: net_exists.stdout == "0"
+ 
+  - name: Set Network to autostart
+    command: virsh --connect {{ vm_uri }} net-autostart --network {{ net_name }}
+    when: net_exists.stdout == "0"
+
+  - name: Start Network
+    command: virsh --connect {{ vm_uri }} net-start {{ net_name }}
+  when: net_exists.stdout == "0"

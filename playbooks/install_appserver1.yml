@@ -1,0 +1,17 @@
+---
+- name: Install appserver1 Virtual Machine
+  hosts: localhost
+  vars:
+    iso_filename: "rhel9-dvd.iso"
+    vm_name: appserver1
+    vm_cpus: 2
+    vm_memory: 2048
+    vm_network: lab-isolnet
+    vm_disk_size: 27
+    vm_cdrom: "/tmp/lab-images/{{ iso_filename }}"
+    vm_ks_image: appserver1_ks.img
+  roles:
+    - lab.define_net
+    - lab.fetch_media
+    - lab.gen_kickstart
+    - lab.install_vm

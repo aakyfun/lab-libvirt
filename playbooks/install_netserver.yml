@@ -1,0 +1,36 @@
+---
+# I put a lot of vars here to demonstrate what you can do!
+- name: Install the netserver VM
+  hosts: localhost
+  roles:
+    - lab.fetch_media
+    - lab.gen_kickstart
+    - lab.define_net
+    - lab.install_vm
+  vars:
+    iso_url: "http://mirrors.kernel.org/almalinux/9.1/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso"
+    iso_filename: "alma9-minimal.iso"
+    vm_uri: "qemu:///system"
+    vm_name: netserver
+    vm_cpus: 2
+    vm_memory: 2048
+    vm_network: default
+    vm_extra_args: "--network network=lab-isolnet"
+    vm_disk_size: 27
+    vm_cdrom: "/tmp/lab-images/{{ iso_filename }}"
+    vm_ks_image: netserver_ks.img
+    ks_timezone: "America/New_York"
+    ks_kbd_layout: "us"
+    ks_sys_language: "en_US.UTF-8"
+    ks_bootloader_append: "loglevel=3 quiet"
+    ks_postinstall_script: |
+      echo Linux is cool! > /var/log/hello.txt
+  tasks:
+    - name: Friendly Reminders and Wise Words
+      debug:
+        msg: "{{ item }}"
+      with_items:
+        - "Check virt-viewer to make sure the installation is going alright"
+        - "Get the IP address of the NAT interface of this VM to connect with SSH"
+        - "Set this VM up to be a router, dhcp, dns, etc server for the other VMs to use"
+        - "Have fun!"
